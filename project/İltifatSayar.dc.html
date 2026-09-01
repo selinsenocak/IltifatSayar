@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#e7e2d9}
+@keyframes isBreathe{0%,100%{opacity:.82}50%{opacity:1}}
+@keyframes isSlideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes isSparkle{0%{opacity:0;transform:translate(0,0) scale(.4)}30%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1)}}
+a{color:#2C4F86;text-decoration:none}
+a:hover{color:#1A3159}
+</style>
+</helmet>
+<div style="width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;box-sizing:border-box">
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{dark}}" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;position:relative;background:{{c.bg}};font-family:'Inter',system-ui,sans-serif">
+
+<sc-if value="{{toast}}" hint-placeholder-val="{{false}}">
+<div style="position:absolute;top:58px;left:16px;right:16px;z-index:200;background:{{c.text}};color:{{c.bg}};padding:12px 16px;border-radius:14px;font-size:13px;text-align:center;box-shadow:0 8px 20px rgba(0,0,0,0.25)">{{toast}}</div>
+</sc-if>
+
+<sc-if value="{{isHome}}" hint-placeholder-val="{{true}}">
+<div style="flex:1;overflow-y:auto;padding:60px 20px 110px;box-sizing:border-box;display:flex;flex-direction:column">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+    <span style="font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:{{c.text}}">İltifatSayar</span>
+    <div style="display:flex;gap:8px">
+      <button onClick="{{toggleDark}}" style="width:36px;height:36px;border-radius:999px;border:none;background:{{c.iconBg}};display:flex;align-items:center;justify-content:center;cursor:pointer" aria-label="Tema">
+        <span style="font-size:16px">{{themeIcon}}</span>
+      </button>
+      <button onClick="{{openSettings}}" style="width:36px;height:36px;border-radius:999px;border:none;background:{{c.iconBg}};display:flex;align-items:center;justify-content:center;cursor:pointer" aria-label="Ayarlar">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="{{c.text}}" stroke-width="2"/><path d="M19.4 13a7.7 7.7 0 000-2l2-1.5-2-3.5-2.3.9a7.6 7.6 0 00-1.8-1L15 3h-4l-.3 2.9a7.6 7.6 0 00-1.8 1l-2.3-.9-2 3.5L6.6 11a7.7 7.7 0 000 2l-2 1.5 2 3.5 2.3-.9a7.6 7.6 0 001.8 1L11 21h4l.3-2.9a7.6 7.6 0 001.8-1l2.3.9 2-3.5-2-1.5z" stroke="{{c.text}}" stroke-width="1.6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div style="background:{{c.counterBg}};border-radius:22px;padding:22px 20px;box-shadow:0 6px 18px rgba(0,0,0,0.06);display:flex;flex-direction:column;align-items:center;gap:14px">
+    <div style="display:flex;gap:6px;background:{{c.iconBg}};padding:4px;border-radius:999px">
+      <button onClick="{{setPeriodHafta}}" style="{{haftaBtnStyle}}">bu hafta</button>
+      <button onClick="{{setPeriodAy}}" style="{{ayBtnStyle}}">bu ay</button>
+      <button onClick="{{setPeriodToplam}}" style="{{toplamBtnStyle}}">toplam</button>
+    </div>
+    <div style="display:flex;align-items:baseline;gap:8px">
+      <span style="font-family:'JetBrains Mono',monospace;font-weight:600;font-size:56px;line-height:1;color:{{c.counterNum}}">{{periodCount}}</span>
+      <span style="font-size:30px">💎</span>
+    </div>
+    <span style="font-size:13px;color:{{c.sub}}">{{periodLabel}}</span>
+  </div>
+
+  <div style="position:relative;display:flex;justify-content:center;margin:26px 0 30px">
+    <sc-if value="{{showBurst}}" hint-placeholder-val="{{false}}">
+      <span style="position:absolute;font-size:18px;left:50%;top:0;--dx:-38px;--dy:-30px;animation:isSparkle 700ms ease-out">💎</span>
+      <span style="position:absolute;font-size:14px;left:50%;top:0;--dx:34px;--dy:-38px;animation:isSparkle 700ms ease-out">💎</span>
+      <span style="position:absolute;font-size:12px;left:50%;top:6px;--dx:4px;--dy:-46px;animation:isSparkle 700ms ease-out">💎</span>
+    </sc-if>
+    <button onClick="{{openAdd}}" style="width:76px;height:76px;border-radius:999px;border:none;background:{{c.fabBg}};box-shadow:0 10px 24px rgba(0,0,0,0.18);display:flex;align-items:center;justify-content:center;cursor:pointer;transform:scale({{fabScale}});transition:transform 150ms ease">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="{{c.fabIcon}}" stroke-width="2.5" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+
+  <span style="font-family:'Fraunces',serif;font-weight:600;font-size:15px;color:{{c.text}};margin-bottom:12px">bu ay biriktirdiklerin</span>
+
+  <sc-if value="{{hasCompliments}}" hint-placeholder-val="{{true}}">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <sc-for list="{{sortedCompliments}}" as="item" hint-placeholder-count="2">
+        <div style="background:{{c.histBg}};border-left:3px solid {{c.histBorder}};border-radius:12px;padding:14px 16px;animation:isSlideUp 250ms ease both">
+          <div style="color:{{c.histText}};font-size:14.5px;line-height:1.45">{{item.text}}</div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px">
+            <span style="color:{{c.sub}};font-size:12px">{{item.who}}</span>
+            <span style="color:{{c.sub}};font-size:12px">{{item.dateLabel}}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+  <sc-if value="{{!hasCompliments}}" hint-placeholder-val="{{false}}">
+    <div style="text-align:center;padding:18px 10px;display:flex;flex-direction:column;align-items:center;gap:8px">
+      <span style="font-family:'Fraunces',serif;font-style:italic;font-size:16px;color:{{c.text}};animation:isBreathe 3s ease-in-out infinite">Henüz iltifat biriktirmemişsin.</span>
+      <span style="font-size:13px;color:{{c.sub}}">Yukarıdaki taşa dokunarak ilkini ekle</span>
+    </div>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{isAuth}}" hint-placeholder-val="{{false}}">
+<div style="flex:1;background:{{c.authBg}};padding:60px 22px 30px;box-sizing:border-box;display:flex;flex-direction:column">
+  <button onClick="{{backToHome}}" style="width:36px;height:36px;border-radius:999px;border:none;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:26px">
+    <svg width="9" height="16" viewBox="0 0 9 16"><path d="M8 1L1 8l7 7" stroke="{{c.authBtnBg}}" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <span style="font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:{{c.authBtnBg}}">hesabını oluştur</span>
+  <span style="font-size:13.5px;color:{{c.authBtnBg}};opacity:0.75;margin-top:8px;line-height:1.5">biriktirdiğin iltifatlar bu hesaba aktarılacak, hiçbir kayıt kaybolmayacak.</span>
+
+  <div style="background:{{c.authCardBg}};border-radius:20px;padding:20px;margin-top:26px;display:flex;flex-direction:column;gap:14px;box-shadow:0 10px 24px rgba(0,0,0,0.1)">
+    <div style="display:flex;gap:6px;background:{{c.iconBg}};padding:4px;border-radius:999px">
+      <button onClick="{{setAuthEmail}}" style="{{emailTabStyle}}">e-posta</button>
+      <button onClick="{{setAuthPhone}}" style="{{phoneTabStyle}}">telefon</button>
+    </div>
+    <input value="{{authId}}" onChange="{{handleAuthId}}" placeholder="{{authIdPlaceholder}}" style="border:none;border-bottom:1.5px solid {{c.inputBorder}};background:none;padding:8px 2px;font-size:15px;color:{{c.text}};outline:none;font-family:'Inter',sans-serif"/>
+    <input value="{{authPassword}}" onChange="{{handleAuthPassword}}" type="password" placeholder="şifre" style="border:none;border-bottom:1.5px solid {{c.inputBorder}};background:none;padding:8px 2px;font-size:15px;color:{{c.text}};outline:none;font-family:'Inter',sans-serif"/>
+    <button onClick="{{authSubmit}}" style="margin-top:6px;border:none;border-radius:999px;padding:13px;background:{{c.authBtnBg}};color:{{c.authBtnText}};font-size:15px;font-weight:600;cursor:pointer">kayıt ol / giriş yap</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{isSettings}}" hint-placeholder-val="{{false}}">
+<div style="flex:1;overflow-y:auto;background:{{c.settingsBg}};padding:60px 20px 40px;box-sizing:border-box;display:flex;flex-direction:column;gap:18px">
+  <div style="display:flex;align-items:center;gap:12px">
+    <button onClick="{{backToHome}}" style="width:36px;height:36px;border-radius:999px;border:none;background:rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer">
+      <svg width="9" height="16" viewBox="0 0 9 16"><path d="M8 1L1 8l7 7" stroke="{{c.text}}" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <span style="font-family:'Fraunces',serif;font-weight:600;font-size:22px;color:{{c.text}}">ayarlar</span>
+  </div>
+
+  <div style="background:{{c.settingsCardBg}};border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:14px">
+    <span style="font-size:12px;color:{{c.sub}};text-transform:uppercase;letter-spacing:0.04em">bildirimler</span>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:15px;color:{{c.text}}">e-posta bildirimleri</span>
+      <button onClick="{{toggleEmail}}" style="{{emailToggleStyle}}"><span style="{{emailKnobStyle}}"></span></button>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:15px;color:{{c.text}}">push bildirimleri</span>
+      <button onClick="{{togglePush}}" style="{{pushToggleStyle}}"><span style="{{pushKnobStyle}}"></span></button>
+    </div>
+  </div>
+
+  <div style="background:{{c.settingsCardBg}};border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px">
+    <span style="font-size:12px;color:{{c.sub}};text-transform:uppercase;letter-spacing:0.04em">moral e-postası periyodu</span>
+    <div style="display:flex;gap:6px;background:{{c.iconBg}};padding:4px;border-radius:999px">
+      <button onClick="{{setPeriod1}}" style="{{p1Style}}">1 gün</button>
+      <button onClick="{{setPeriod3}}" style="{{p3Style}}">3 gün</button>
+      <button onClick="{{setPeriod7}}" style="{{p7Style}}">7 gün</button>
+    </div>
+  </div>
+
+  <div style="background:{{c.settingsCardBg}};border-radius:16px;padding:16px;display:flex;justify-content:space-between;align-items:center">
+    <span style="font-size:15px;color:{{c.text}}">karanlık mod</span>
+    <button onClick="{{toggleDark}}" style="{{darkToggleStyle}}"><span style="{{darkKnobStyle}}"></span></button>
+  </div>
+
+  <div style="background:{{c.settingsCardBg}};border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px">
+    <span style="font-size:12px;color:{{c.sub}};text-transform:uppercase;letter-spacing:0.04em">hesap</span>
+    <span style="font-size:14px;color:{{c.text}}">{{accountStatus}}</span>
+    <a href="#" style="font-size:14px">verilerini indir</a>
+    <a href="#" style="font-size:14px;color:{{c.danger}}">hesabı sil</a>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{showAddSheet}}" hint-placeholder-val="{{false}}">
+<div style="position:absolute;inset:0;background:rgba(0,0,0,0.42);display:flex;align-items:flex-end;z-index:150">
+  <div style="width:100%;background:{{c.sheetBg}};border-radius:24px 24px 0 0;padding:18px 20px 26px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px;animation:isSlideUp 220ms ease both">
+    <div style="width:38px;height:4px;border-radius:99px;background:{{c.sub}};opacity:0.4;align-self:center"></div>
+    <span style="font-family:'Fraunces',serif;font-weight:600;font-size:18px;color:{{c.text}}">iltifat ekle</span>
+    <textarea value="{{addText}}" onChange="{{handleTextChange}}" placeholder="ne dediler?" rows="2" style="border:none;border-bottom:1.5px solid {{c.inputBorder}};background:none;padding:8px 2px;font-size:15px;color:{{c.text}};outline:none;font-family:'Inter',sans-serif;resize:none"></textarea>
+    <input value="{{addWho}}" onChange="{{handleWhoChange}}" placeholder="kim söyledi? (opsiyonel)" style="border:none;border-bottom:1.5px solid {{c.inputBorder}};background:none;padding:8px 2px;font-size:15px;color:{{c.text}};outline:none;font-family:'Inter',sans-serif"/>
+    <div style="display:flex;gap:10px;margin-top:6px">
+      <button onClick="{{closeAdd}}" style="flex:1;border:none;border-radius:999px;padding:13px;background:{{c.iconBg}};color:{{c.text}};font-size:14px;cursor:pointer">vazgeç</button>
+      <button onClick="{{saveCompliment}}" style="flex:2;border:none;border-radius:999px;padding:13px;background:{{c.fabBg}};color:{{c.fabIcon}};font-size:15px;font-weight:600;cursor:pointer">kaydet</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+</div>
+</x-import>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;darkModeDefault&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Başlangıç&quot;},&quot;moralPeriodDefault&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:3,&quot;options&quot;:[1,3,7],&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Başlangıç&quot;}}">
+const LIGHT = {
+  bg:'#F3EEE6', text:'#221F26', sub:'#7C7A82', counterBg:'#FBF9F5',
+  counterNum:'#124732', fabBg:'#D9A430', fabIcon:'#221F26',
+  histBg:'rgba(140,169,212,0.12)', histBorder:'#2C4F86',
+  histText:'#221F26', sheetBg:'#FBF9F5', inputBorder:'#C9C6C0',
+  iconBg:'rgba(34,31,38,0.06)', authBg:'#8CA9D4', authCardBg:'#FBF9F5',
+  authBtnBg:'#1A3159', authBtnText:'#F3EEE6', settingsBg:'#B79BD9',
+  settingsCardBg:'#FFFFFF', toggleOn:'#1E7A56', toggleOff:'#ADABB3',
+  danger:'#A8354A'
+};
+const DARK = {
+  bg:'#100E13', text:'#F3EEE6', sub:'#ADABB3', counterBg:'#221F26',
+  counterNum:'#7FC4A3', fabBg:'#F0CE85', fabIcon:'#100E13',
+  histBg:'rgba(140,169,212,0.14)', histBorder:'#8CA9D4',
+  histText:'#F3EEE6', sheetBg:'#221F26', inputBorder:'#4E4C54',
+  iconBg:'rgba(255,255,255,0.08)', authBg:'#1A3159', authCardBg:'#221F26',
+  authBtnBg:'#8CA9D4', authBtnText:'#100E13', settingsBg:'#45266B',
+  settingsCardBg:'#221F26', toggleOn:'#7FC4A3', toggleOff:'#4E4C54',
+  danger:'#D98A97'
+};
+
+function dateLabel(iso){
+  const d = new Date(iso), now = new Date();
+  const days = Math.floor((now.setHours(0,0,0,0) - new Date(d).setHours(0,0,0,0)) / 86400000);
+  if (days <= 0) return 'bugün';
+  if (days === 1) return 'dün';
+  if (days < 7) return days + ' gün önce';
+  return d.toLocaleDateString('tr-TR', { day:'numeric', month:'short' });
+}
+
+function seg(active, dark){
+  return 'flex:1;border:none;border-radius:999px;padding:7px 4px;font-size:12px;cursor:pointer;font-family:Inter,sans-serif;background:' +
+    (active ? (dark ? '#F3EEE6' : '#221F26') : 'transparent') + ';color:' +
+    (active ? (dark ? '#221F26' : '#F3EEE6') : (dark ? '#ADABB3' : '#7C7A82'));
+}
+
+function toggleStyle(on, colorOn, colorOff){
+  return 'width:46px;height:27px;border-radius:999px;border:none;padding:2px;cursor:pointer;transition:background 200ms ease;background:' + (on ? colorOn : colorOff) + ';display:flex;align-items:center;justify-content:' + (on ? 'flex-end' : 'flex-start');
+}
+function knobStyle(){
+  return 'width:23px;height:23px;border-radius:999px;background:#fff;display:block;box-shadow:0 1px 3px rgba(0,0,0,0.25)';
+}
+
+class Component extends DCLogic {
+  state = (() => {
+    let compliments;
+    try { compliments = JSON.parse(localStorage.getItem('is-compliments')); } catch(e){}
+    if (!Array.isArray(compliments)) {
+      const y = new Date(); y.setDate(y.getDate()-1);
+      compliments = [{ id: 1, text:'Bugünkü sunumun çok etkileyiciydi.', who:'iş arkadaşım', date: y.toISOString() }];
+    }
+    const savedDark = localStorage.getItem('is-dark');
+    const savedReg = localStorage.getItem('is-registered');
+    const savedPeriod = localStorage.getItem('is-moral-period');
+    return {
+      dark: savedDark !== null ? savedDark === '1' : !!this.props.darkModeDefault,
+      registered: savedReg === '1',
+      compliments,
+      screen: 'home',
+      period: 'toplam',
+      showAddSheet: false, addText: '', addWho: '',
+      pendingCompliment: null, showBurst: false, fabScale: 1,
+      authMode: 'email', authId: '', authPassword: '',
+      notifyEmail: true, notifyPush: true,
+      moralPeriod: savedPeriod ? Number(savedPeriod) : (this.props.moralPeriodDefault ?? 3),
+      toast: ''
+    };
+  })();
+
+  persist = () => {
+    localStorage.setItem('is-compliments', JSON.stringify(this.state.compliments));
+    localStorage.setItem('is-registered', this.state.registered ? '1' : '0');
+    localStorage.setItem('is-dark', this.state.dark ? '1' : '0');
+    localStorage.setItem('is-moral-period', String(this.state.moralPeriod));
+  };
+
+  toggleDark = () => this.setState(s => ({ dark: !s.dark }), this.persist);
+  openSettings = () => this.setState({ screen: 'settings' });
+  backToHome = () => this.setState({ screen: 'home', pendingCompliment: null });
+  openAdd = () => this.setState({ showAddSheet: true, addText: '', addWho: '' });
+  closeAdd = () => this.setState({ showAddSheet: false });
+  handleTextChange = (e) => this.setState({ addText: e.target.value });
+  handleWhoChange = (e) => this.setState({ addWho: e.target.value });
+  setPeriodHafta = () => this.setState({ period: 'hafta' });
+  setPeriodAy = () => this.setState({ period: 'ay' });
+  setPeriodToplam = () => this.setState({ period: 'toplam' });
+  setAuthEmail = () => this.setState({ authMode: 'email', authId: '' });
+  setAuthPhone = () => this.setState({ authMode: 'phone', authId: '' });
+  handleAuthId = (e) => this.setState({ authId: e.target.value });
+  handleAuthPassword = (e) => this.setState({ authPassword: e.target.value });
+  toggleEmail = () => this.setState(s => ({ notifyEmail: !s.notifyEmail }));
+  togglePush = () => this.setState(s => ({ notifyPush: !s.notifyPush }));
+  setPeriod1 = () => this.setState({ moralPeriod: 1 }, this.persist);
+  setPeriod3 = () => this.setState({ moralPeriod: 3 }, this.persist);
+  setPeriod7 = () => this.setState({ moralPeriod: 7 }, this.persist);
+
+  commitCompliment = (item) => {
+    this.setState(s => ({
+      compliments: [...s.compliments, item], showAddSheet: false, showBurst: true, fabScale: 1.08
+    }), () => {
+      this.persist();
+      setTimeout(() => this.setState({ fabScale: 1 }), 150);
+      setTimeout(() => this.setState({ showBurst: false }), 700);
+    });
+  };
+
+  saveCompliment = () => {
+    const text = this.state.addText.trim();
+    if (!text) return;
+    const item = { id: Date.now(), text, who: this.state.addWho.trim(), date: new Date().toISOString() };
+    if (!this.state.registered && this.state.compliments.length >= 2) {
+      this.setState({ pendingCompliment: item, showAddSheet: false, screen: 'auth' });
+      return;
+    }
+    this.commitCompliment(item);
+  };
+
+  authSubmit = () => {
+    this.setState(s => ({ registered: true, screen: 'home', toast: 'hesabın oluşturuldu, iltifatların aktarıldı.' }), () => {
+      this.persist();
+      if (this.state.pendingCompliment) {
+        const item = this.state.pendingCompliment;
+        this.setState({ pendingCompliment: null });
+        this.commitCompliment(item);
+      }
+      setTimeout(() => this.setState({ toast: '' }), 2600);
+    });
+  };
+
+  renderVals() {
+    const s = this.state;
+    const c = s.dark ? DARK : LIGHT;
+    const now = Date.now();
+    const withDates = s.compliments.map(it => ({ ...it, dateLabel: dateLabel(it.date) }));
+    const sorted = [...withDates].sort((a, b) => new Date(b.date) - new Date(a.date));
+    const weekCount = s.compliments.filter(it => now - new Date(it.date).getTime() <= 7 * 86400000).length;
+    const monthCount = s.compliments.filter(it => now - new Date(it.date).getTime() <= 30 * 86400000).length;
+    const totalCount = s.compliments.length;
+    const periodCount = s.period === 'hafta' ? weekCount : s.period === 'ay' ? monthCount : totalCount;
+    const periodLabel = s.period === 'hafta' ? 'bu hafta' : s.period === 'ay' ? 'bu ay' : 'toplam';
+
+    return {
+      dark: s.dark, c, screen: s.screen,
+      isHome: s.screen === 'home', isAuth: s.screen === 'auth', isSettings: s.screen === 'settings',
+      themeIcon: s.dark ? '☾' : '☀',
+      periodCount, periodLabel,
+      haftaBtnStyle: seg(s.period === 'hafta', s.dark),
+      ayBtnStyle: seg(s.period === 'ay', s.dark),
+      toplamBtnStyle: seg(s.period === 'toplam', s.dark),
+      showBurst: s.showBurst, fabScale: s.fabScale,
+      hasCompliments: sorted.length > 0, sortedCompliments: sorted,
+      showAddSheet: s.showAddSheet, addText: s.addText, addWho: s.addWho,
+      toast: s.toast,
+      authId: s.authId, authPassword: s.authPassword,
+      authIdPlaceholder: s.authMode === 'email' ? 'e-posta adresin' : 'telefon numaran',
+      emailTabStyle: seg(s.authMode === 'email', false),
+      phoneTabStyle: seg(s.authMode === 'phone', false),
+      emailToggleStyle: toggleStyle(s.notifyEmail, c.toggleOn, c.toggleOff),
+      emailKnobStyle: knobStyle(),
+      pushToggleStyle: toggleStyle(s.notifyPush, c.toggleOn, c.toggleOff),
+      pushKnobStyle: knobStyle(),
+      darkToggleStyle: toggleStyle(s.dark, c.toggleOn, c.toggleOff),
+      darkKnobStyle: knobStyle(),
+      p1Style: seg(s.moralPeriod === 1, s.dark),
+      p3Style: seg(s.moralPeriod === 3, s.dark),
+      p7Style: seg(s.moralPeriod === 7, s.dark),
+      accountStatus: s.registered ? 'kayıtlı hesap' : 'misafir modu — kaydın 2 iltifata kadar geçerli',
+      openAdd: this.openAdd, closeAdd: this.closeAdd, saveCompliment: this.saveCompliment,
+      handleTextChange: this.handleTextChange, handleWhoChange: this.handleWhoChange,
+      toggleDark: this.toggleDark, openSettings: this.openSettings, backToHome: this.backToHome,
+      setPeriodHafta: this.setPeriodHafta, setPeriodAy: this.setPeriodAy, setPeriodToplam: this.setPeriodToplam,
+      setAuthEmail: this.setAuthEmail, setAuthPhone: this.setAuthPhone,
+      handleAuthId: this.handleAuthId, handleAuthPassword: this.handleAuthPassword, authSubmit: this.authSubmit,
+      toggleEmail: this.toggleEmail, togglePush: this.togglePush,
+      setPeriod1: this.setPeriod1, setPeriod3: this.setPeriod3, setPeriod7: this.setPeriod7
+    };
+  }
+}
+
+</script>
+</body>
+</html>

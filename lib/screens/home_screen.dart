@@ -96,7 +96,19 @@ class HomeScreen extends StatelessWidget {
                 for (final item in items)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10),
-                    child: SlideUpIn(child: _HistoryCard(item: item, c: c)),
+                    child: Dismissible(
+                      key: ValueKey(item.id),
+                      direction: DismissDirection.endToStart,
+                      confirmDismiss: (_) => _confirmDelete(context, c),
+                      onDismissed: (_) => s.deleteCompliment(item.id),
+                      background: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        alignment: Alignment.centerRight,
+                        decoration: BoxDecoration(color: c.danger, borderRadius: BorderRadius.circular(12)),
+                        child: const Icon(Icons.delete_outline, color: Colors.white),
+                      ),
+                      child: SlideUpIn(child: _HistoryCard(item: item, c: c)),
+                    ),
                   ),
               ],
             ),
@@ -104,6 +116,31 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Kaydırarak silmeden önce sorulan onay — Beck'in "kanıt biriktirme"
+/// çerçevesinde bu kayıtlar kıymetli olduğundan yanlışlıkla silinmesin diye.
+Future<bool> _confirmDelete(BuildContext context, AppPalette c) async {
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      backgroundColor: c.sheetBg,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: Text('iltifatı sil?', style: TextStyle(color: c.text)),
+      content: Text('bu kayıt geri getirilemez.', style: TextStyle(color: c.sub)),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(ctx).pop(false),
+          child: Text('vazgeç', style: TextStyle(color: c.sub)),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(ctx).pop(true),
+          child: Text('sil', style: TextStyle(color: c.danger, fontWeight: FontWeight.w600)),
+        ),
+      ],
+    ),
+  );
+  return confirmed ?? false;
 }
 
 class _IconButton extends StatelessWidget {

@@ -233,6 +233,14 @@ class AppController extends ChangeNotifier {
     _commitCompliment(item);
   }
 
+  /// Geçmişten tek bir iltifatı kalıcı olarak kaldırır (ana ekranda kart
+  /// sağdan sola kaydırılıp onaylandığında çağrılır).
+  void deleteCompliment(int id) {
+    compliments = compliments.where((c) => c.id != id).toList();
+    notifyListeners();
+    _persist();
+  }
+
   void authSubmit() {
     registered = true;
     screen = AppScreen.home;
@@ -285,4 +293,23 @@ class AppController extends ChangeNotifier {
   String get accountStatus => registered
       ? 'kayıtlı hesap'
       : 'misafir modu — kaydın 2 iltifata kadar geçerli';
+
+  /// Ayarlar'daki "verilerini indir" için: tüm iltifatlar + tercihler,
+  /// okunabilir/taşınabilir bir JSON metni olarak (bkz. intent.md §7 veri
+  /// taşınabilirliği maddesi).
+  String exportDataJson() {
+    final data = {
+      'app': 'İltifatSayar',
+      'exportedAt': DateTime.now().toIso8601String(),
+      'compliments': compliments.map((c) => c.toJson()).toList(),
+      'settings': {
+        'moralPeriodDays': moralPeriod,
+        'notifyEmail': notifyEmail,
+        'notifyPush': notifyPush,
+        'darkMode': dark,
+        'registered': registered,
+      },
+    };
+    return const JsonEncoder.withIndent('  ').convert(data);
+  }
 }

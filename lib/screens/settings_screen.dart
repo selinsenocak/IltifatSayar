@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../services/data_export.dart';
 import '../state/app_controller.dart';
 import '../theme/palette.dart';
 import '../widgets/segmented_control.dart';
@@ -103,7 +104,7 @@ class SettingsScreen extends StatelessWidget {
                   Text(s.accountStatus, style: TextStyle(fontSize: 14, color: c.text)),
                   const SizedBox(height: 10),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () => shareExportedData(s),
                     child: Text('verilerini indir', style: TextStyle(fontSize: 14, color: c.histBorder)),
                   ),
                   const SizedBox(height: 8),
